@@ -14,7 +14,6 @@ subSocket.on(
         grapher.addData(unpackedData.payload)
       when "gc_stats"
         grapher.updateGcStats(unpackedData.payload)
-    grapher.renderGraphAndLegend()
 )
 
 grapher = new Graph('#chart')

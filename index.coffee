@@ -1,4 +1,5 @@
 app = require 'app'
+
 BrowserWindow = require 'browser-window'
 require('crash-reporter').start()
 

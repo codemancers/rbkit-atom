@@ -16,12 +16,10 @@ subSocket.on('message', function(data) {
   unpackedData = msgpack.unpack(data);
   switch (unpackedData.event_type) {
     case 'obj_created':
-      grapher.addData(unpackedData.payload);
-      break;
+      return grapher.addData(unpackedData.payload);
     case "gc_stats":
-      grapher.updateGcStats(unpackedData.payload);
+      return grapher.updateGcStats(unpackedData.payload);
   }
-  return grapher.renderGraphAndLegend();
 });
 
 grapher = new Graph('#chart');
