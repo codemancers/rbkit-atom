@@ -1,0 +1,20 @@
+{
+  "name": "rbkit-client-atom",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "coffee-script": "^1.8.0",
+    "d3": "^3.4.11",
+    "rickshaw": "^1.4.6",
+    "msgpack": "^0.2.4",
+    "zmq": "^2.8.0",
+    "nan": "~1.3.0",
+    "bindings": "~1.1.1"
+  }
+}

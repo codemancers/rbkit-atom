@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RBKIT Client</title>
+  <link rel="stylesheet" href="rickshaw.css">
+  <link rel="stylesheet" href="rickchart.css">
+  <script type="text/javascript" charset="utf-8">
+    window.$  = window.jQuery = require('./jquery.js');
+    window._ = require('./underscore.js')
+    window.Rickshaw = require('rickshaw')
+    console.log(Rickshaw.Color);
+  </script>
+  <meta charset="utf-8" />
+</head>
+<body>
+    <div id="chart_container">
+      <div id="chart"></div>
+      <div id="gcstats">
+        <h5 class="stats-title">GC Stats</h5>
+        <table>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div id="legend"></div>
+  <script type="text/javascript" charset="utf-8" src='rickchart.js'></script>
+  <script type="text/javascript" charset="utf-8" src='app.js'></script>
+</body>
+</html>
