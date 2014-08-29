@@ -1,4 +1,5 @@
 app = require 'app'
+aggregator = require './aggregator'
 
 BrowserWindow = require 'browser-window'
 require('crash-reporter').start()
@@ -21,4 +22,5 @@ app.on(
         ->
           mainWindow = null
      )
+     aggregator()
 )
