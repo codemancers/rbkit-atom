@@ -3,10 +3,10 @@
 
 zmq = require('zmq')
 msgpack = require('msgpack')
-aggregator ->
+aggregator = ->
   subSocket = zmq.socket('sub')
   sqlite    = require('sqlite3')
-  db = new sqlite.Database('object_events.db')
+  db = new sqlite.Database(':memory:')
   db.serialize ->
     db.run('create table obj_created (timestamp TEXT, classname TEXT, objectId TEXT)')
     db.run('create table obj_destroyed (timestamp TEXT, objectId TEXT)')
@@ -23,16 +23,16 @@ aggregator ->
           when 'obj_created'
             db.run(
               "insert into obj_created values (
-              #{unpackedData.timestamp},
+              #{unpackedData.timestamp.toString()},
               #{unpackedData.payload.class},
-              #{unpackedData.payload.object_id}
+              #{unpackedData.payload.object_id.toString()}
               )"
             )
           when 'obj_destroyed'
             db.run(
               "insert into obj_destroyed values (
-              #{unpackedData.timestamp},
-              #{unpackedData.payload.object_id}
+              #{unpackedData.timestamp.toString()},
+              #{unpackedData.payload.object_id.toString()}
               )"
             )
   )
