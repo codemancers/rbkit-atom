@@ -24,5 +24,8 @@ app.on(
      )
      Agg = aggregator()
      agg = new Agg
-     agg.run([])
+     objectCount = []
+     objectStore = []
+     agg.run(objectStore, objectCount)
+     #pump objectCount to UI
 )

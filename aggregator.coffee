@@ -11,8 +11,8 @@ _ = require('./underscore.js')
 # TODO The count can be removed since object_ids is an array. stats.object_ids.length can be called
 # This should be changed to two classes:
 #
-# objectStore
-# objectCount
+# objectStore: [ {className: 'String', object_ids: []}, {}, {}]
+# objectCount: [ { className: 'String', count: 0 } ]
 #
 # objectStore will have a collection of a map between className and objectIds
 # objectCount will have a collection of a map between className and count
@@ -20,64 +20,61 @@ _ = require('./underscore.js')
 # These two should act like subscribers to the socket data that is being streamed
 #
 class Aggregator
-  run: (objectStoreList) =>
+  run: (objectStore, objectCount) =>
     subSocket = zmq.socket('sub')
 
     subSocket.connect('tcp://127.0.0.1:5555')
     subSocket.subscribe('')
-    @previousTimestamp = 0
 
     subSocket.on(
       'message',
       (data) ->
         unpackedData = msgpack.unpack(data)
-        existingObjectStore = _.find(
-          objectStoreList,
-          (objectStore) ->
-            objectStore.timestamp is unpackedData.timestamp
-        )
-
-        if existingObjectStore
-          switch unpackedData.event_type
-            when 'obj_created'
-              existingStats = _.find(
-                existingObjectStore.stats,
-                (statsObj) ->
-                  statsObj.className is unpackedData.payload.class
-              )
-              if existingStats
-                existingStats.count += 1
-                existingStats.object_ids.push(unpackedData.payload.object_id)
-              else
-                existingObjectStore.stats.push(
-                  className: unpackedData.payload.class,
-                  count: 1,
-                  object_ids: [ unpackedData.payload.object_id ]
-                )
-            when 'obj_destroyed'
-              existingStatsObject = _.find(
-                existingObjectStore.stats,
-                (statsObj) ->
-                  statsObj.object_ids.indexOf(unpackedData.payload.object_id) > -1
-              )
-              if existingStatsObject
-                existingStatsObject.stats.count -= 1
-                existingStatsObject.stats.object_ids = _.difference(
-                  existingStatsObject.stats.object_ids,
-                  [ unpackedData.payload.object_id ]
-                )
-              else
-                # Find out why sometimes this else block gets triggered
-        else
-          objectStoreList.push(
-            timestamp: unpackedData.timestamp,
-            stats: [
-              className: unpackedData.payload.class,
-              count: 1,
-              object_ids: [unpackedData.payload.object_id ]
-            ]
-          )
-        console.log objectStoreList
+        switch unpackedData.event_type
+          when 'event_collection'
+            payload = unpackedData.payload
+            for payloadData in payload
+              switch payloadData.event_type
+                when 'obj_created'
+                  existingObjectStore = _.find(
+                    objectStore,
+                    (objectStoreData) ->
+                      objectStoreData.className is payloadData.payload.class
+                  )
+                  existingCount = _.find(
+                    objectCount,
+                    (objectCountData) ->
+                      objectCountData.className is payloadData.payload.class
+                  )
+                  if existingObjectStore
+                    existingObjectStore.object_ids.push(payloadData.payload.object_id)
+                    existingCount.count += 1
+                  else
+                    objectStore.push(
+                      className: payloadData.payload.class
+                      object_ids: [ payloadData.payload.object_id ]
+                    )
+                    objectCount.push(
+                      className: payloadData.payload.class
+                      count: 1
+                    )
+                when 'obj_deleted'
+                  existingObjectStore = _.find(
+                    objectStore,
+                    (objectStoreData) ->
+                      objectStoreData.object_ids.indexOf(payloadData.payload.object_id) > -1
+                  )
+                  existingCount = _.find(
+                    objectCount,
+                    (objectCountData) ->
+                      objectCountData.className is existingObjectStore.className
+                  )
+                  if existingObjectStore
+                    existingObjectStore = _.difference(
+                      existingObjectStore.object_ids,
+                      [ payloadData.payload.object_id ]
+                    )
+                    existingCount -= 1
     )
 
 aggregator =  -> Aggregator

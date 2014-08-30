@@ -18,7 +18,7 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  var Agg, agg;
+  var Agg, agg, objectCount, objectStore;
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600
@@ -29,5 +29,7 @@ app.on('ready', function() {
   });
   Agg = aggregator();
   agg = new Agg;
-  return agg.run([]);
+  objectCount = [];
+  objectStore = [];
+  return agg.run(objectStore, objectCount);
 });
