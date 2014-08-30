@@ -8,6 +8,7 @@ following path to `atom-shell`:
 
     /Applications/Atom.app/Contents/MacOS/Atom'
 
+
 Then, inside of an atom-shell project, to run the app, the command would
 be:
 
