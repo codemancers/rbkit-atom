@@ -18,6 +18,7 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
+  var Agg, agg;
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600
@@ -26,5 +27,7 @@ app.on('ready', function() {
   mainWindow.on('closed', function() {
     return mainWindow = null;
   });
-  return aggregator();
+  Agg = aggregator();
+  agg = new Agg;
+  return agg.run([]);
 });

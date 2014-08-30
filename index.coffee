@@ -22,5 +22,7 @@ app.on(
         ->
           mainWindow = null
      )
-     aggregator()
+     Agg = aggregator()
+     agg = new Agg
+     agg.run([])
 )

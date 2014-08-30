@@ -7,7 +7,8 @@ _ = require('./underscore.js')
 
 # objectStoreList would have something like this:
 # { timestamp: xxxxx, stats: [ { className: xxxxx, count: xxx, object_ids:[] }, { className: xxx, count: xxx }] }
-# { timestamp: xxxxx, stats: [ { className: xxxxx, count: xxx }, { className: xxx, count: xxx }] }
+# { timestamp: yyyyy, stats: [ { className: xxxxx, count: xxx }, { className: xxx, count: xxx }] }
+# TODO The count can be removed since object_ids is an array. stats.object_ids.length can be called
 class Aggregator
   run: (objectStoreList) =>
     subSocket = zmq.socket('sub')
@@ -43,6 +44,20 @@ class Aggregator
                   count: 1,
                   object_ids: [ unpackedData.payload.object_id ]
                 )
+            when 'obj_destroyed'
+              existingStatsObject = _.find(
+                existingObjectStore.stats,
+                (statsObj) ->
+                  statsObj.object_ids.indexOf(unpackedData.payload.object_id) > -1
+              )
+              if existingStatsObject
+                existingStatsObject.stats.count -= 1
+                existingStatsObject.stats.object_ids = _.difference(
+                  existingStatsObject.stats.object_ids,
+                  [ unpackedData.payload.object_id ]
+                )
+              else
+                # Find out why sometimes this else block gets triggered
         else
           objectStoreList.push(
             timestamp: unpackedData.timestamp,
@@ -52,10 +67,7 @@ class Aggregator
               object_ids: [unpackedData.payload.object_id ]
             ]
           )
-        console.log JSON.stringify(objectStoreList)
     )
-  getStats: =>
-    @objectStore
 
 aggregator =  -> Aggregator
 module.exports = aggregator

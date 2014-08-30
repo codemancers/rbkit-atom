@@ -10,7 +10,6 @@ _ = require('./underscore.js');
 
 Aggregator = (function() {
   function Aggregator() {
-    this.getStats = __bind(this.getStats, this);
     this.run = __bind(this.run, this);
   }
 
@@ -21,7 +20,7 @@ Aggregator = (function() {
     subSocket.subscribe('');
     this.previousTimestamp = 0;
     return subSocket.on('message', function(data) {
-      var existingObjectStore, existingStats, unpackedData;
+      var existingObjectStore, existingStats, existingStatsObject, unpackedData;
       unpackedData = msgpack.unpack(data);
       existingObjectStore = _.find(objectStoreList, function(objectStore) {
         return objectStore.timestamp === unpackedData.timestamp;
@@ -34,17 +33,28 @@ Aggregator = (function() {
             });
             if (existingStats) {
               existingStats.count += 1;
-              existingStats.object_ids.push(unpackedData.payload.object_id);
+              return existingStats.object_ids.push(unpackedData.payload.object_id);
             } else {
-              existingObjectStore.stats.push({
+              return existingObjectStore.stats.push({
                 className: unpackedData.payload["class"],
                 count: 1,
                 object_ids: [unpackedData.payload.object_id]
               });
             }
+            break;
+          case 'obj_destroyed':
+            existingStatsObject = _.find(existingObjectStore.stats, function(statsObj) {
+              return statsObj.object_ids.indexOf(unpackedData.payload.object_id) > -1;
+            });
+            if (existingStatsObject) {
+              existingStatsObject.stats.count -= 1;
+              return existingStatsObject.stats.object_ids = _.difference(existingStatsObject.stats.object_ids, [unpackedData.payload.object_id]);
+            } else {
+
+            }
         }
       } else {
-        objectStoreList.push({
+        return objectStoreList.push({
           timestamp: unpackedData.timestamp,
           stats: [
             {
@@ -55,12 +65,7 @@ Aggregator = (function() {
           ]
         });
       }
-      return console.log(JSON.stringify(objectStoreList));
     });
-  };
-
-  Aggregator.prototype.getStats = function() {
-    return this.objectStore;
   };
 
   return Aggregator;
