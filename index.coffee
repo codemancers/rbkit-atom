@@ -27,7 +27,6 @@ app.on(
     objectCount = []
     objectStore = []
     agg.run(objectStore, objectCount)
-    #pump objectCount to UI
 )
 
 

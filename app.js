@@ -11,7 +11,19 @@ updater = function() {
 };
 
 ipc.on('asynchronous-reply', function(data) {
-  return grapher.addData(data);
+  var formatForOldData, oldStyleData;
+  formatForOldData = function(newDataFormat) {
+    var values;
+    values = _.map(newDataFormat, function(objData) {
+      return [objData.className, objData.count];
+    });
+    return _.object(values);
+  };
+  if (data.length) {
+    oldStyleData = formatForOldData(data);
+    grapher.addData(oldStyleData);
+    return grapher.renderGraphAndLegend();
+  }
 });
 
 updater();

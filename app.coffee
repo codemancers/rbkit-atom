@@ -9,7 +9,18 @@ updater = ->
 ipc.on(
   'asynchronous-reply',
   (data) ->
-    grapher.addData(data)
+    formatForOldData = (newDataFormat) ->
+      values = _.map(
+        newDataFormat,
+        (objData) ->
+          [objData.className, objData.count]
+      )
+      _.object(values)
+
+    if data.length
+      oldStyleData = formatForOldData(data)
+      grapher.addData(oldStyleData)
+      grapher.renderGraphAndLegend()
 )
 
 updater()
