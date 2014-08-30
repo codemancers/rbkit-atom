@@ -9,6 +9,16 @@ _ = require('./underscore.js')
 # { timestamp: xxxxx, stats: [ { className: xxxxx, count: xxx, object_ids:[] }, { className: xxx, count: xxx }] }
 # { timestamp: yyyyy, stats: [ { className: xxxxx, count: xxx }, { className: xxx, count: xxx }] }
 # TODO The count can be removed since object_ids is an array. stats.object_ids.length can be called
+# This should be changed to two classes:
+#
+# objectStore
+# objectCount
+#
+# objectStore will have a collection of a map between className and objectIds
+# objectCount will have a collection of a map between className and count
+#
+# These two should act like subscribers to the socket data that is being streamed
+#
 class Aggregator
   run: (objectStoreList) =>
     subSocket = zmq.socket('sub')
@@ -67,6 +77,7 @@ class Aggregator
               object_ids: [unpackedData.payload.object_id ]
             ]
           )
+        console.log objectStoreList
     )
 
 aggregator =  -> Aggregator

@@ -33,9 +33,9 @@ Aggregator = (function() {
             });
             if (existingStats) {
               existingStats.count += 1;
-              return existingStats.object_ids.push(unpackedData.payload.object_id);
+              existingStats.object_ids.push(unpackedData.payload.object_id);
             } else {
-              return existingObjectStore.stats.push({
+              existingObjectStore.stats.push({
                 className: unpackedData.payload["class"],
                 count: 1,
                 object_ids: [unpackedData.payload.object_id]
@@ -48,13 +48,13 @@ Aggregator = (function() {
             });
             if (existingStatsObject) {
               existingStatsObject.stats.count -= 1;
-              return existingStatsObject.stats.object_ids = _.difference(existingStatsObject.stats.object_ids, [unpackedData.payload.object_id]);
+              existingStatsObject.stats.object_ids = _.difference(existingStatsObject.stats.object_ids, [unpackedData.payload.object_id]);
             } else {
 
             }
         }
       } else {
-        return objectStoreList.push({
+        objectStoreList.push({
           timestamp: unpackedData.timestamp,
           stats: [
             {
@@ -65,6 +65,7 @@ Aggregator = (function() {
           ]
         });
       }
+      return console.log(objectStoreList);
     });
   };
 
