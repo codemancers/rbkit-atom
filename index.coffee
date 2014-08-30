@@ -15,17 +15,19 @@ app.on(
 app.on(
   'ready',
    ->
-     mainWindow = new BrowserWindow(width: 800, height: 600)
-     mainWindow.loadUrl("file://#{__dirname}/index.html")
-     mainWindow.on(
-       'closed',
-        ->
-          mainWindow = null
-     )
-     Agg = aggregator()
-     agg = new Agg
-     objectCount = []
-     objectStore = []
-     agg.run(objectStore, objectCount)
-     #pump objectCount to UI
+    mainWindow = new BrowserWindow(width: 800, height: 600)
+    mainWindow.loadUrl("file://#{__dirname}/index.html")
+    mainWindow.on(
+      'closed',
+       ->
+         mainWindow = null
+    )
+    Agg = aggregator()
+    agg = new Agg
+    objectCount = []
+    objectStore = []
+    agg.run(objectStore, objectCount)
+    #pump objectCount to UI
 )
+
+

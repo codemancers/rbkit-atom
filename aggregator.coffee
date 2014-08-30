@@ -4,7 +4,7 @@
 zmq = require('zmq')
 msgpack = require('msgpack')
 _ = require('./underscore.js')
-
+ipc = require('ipc')
 # objectStoreList would have something like this:
 # { timestamp: xxxxx, stats: [ { className: xxxxx, count: xxx, object_ids:[] }, { className: xxx, count: xxx }] }
 # { timestamp: yyyyy, stats: [ { className: xxxxx, count: xxx }, { className: xxx, count: xxx }] }
@@ -25,6 +25,11 @@ class Aggregator
 
     subSocket.connect('tcp://127.0.0.1:5555')
     subSocket.subscribe('')
+    ipc.on(
+      'asynchronous-message',
+      (event, arg) ->
+        event.sender.send('asynchronous-reply', objectCount)
+    )
 
     subSocket.on(
       'message',
@@ -79,10 +84,3 @@ class Aggregator
 
 aggregator =  -> Aggregator
 module.exports = aggregator
-
-# Initialize IPC and aggregate for 1 second duration
-
-
-
-
-# Clean up tables every 10 seconds
