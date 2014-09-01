@@ -1,3 +1,4 @@
+path = require('path')
 app = require 'app'
 aggregator = require './aggregator'
 
@@ -16,7 +17,8 @@ app.on(
   'ready',
    ->
     mainWindow = new BrowserWindow(width: 800, height: 600)
-    mainWindow.loadUrl("file://#{__dirname}/index.html")
+    clientPath = path.normalize("#{__dirname}/../client")
+    mainWindow.loadUrl("file://#{clientPath}/index.html")
     mainWindow.on(
       'closed',
        ->

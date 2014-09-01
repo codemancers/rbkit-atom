@@ -3,7 +3,7 @@
 
 zmq = require('zmq')
 msgpack = require('msgpack')
-_ = require('./underscore.js')
+_ = require('../../vendor/underscore.js')
 ipc = require('ipc')
 # objectStoreList would have something like this:
 # { timestamp: xxxxx, stats: [ { className: xxxxx, count: xxx, object_ids:[] }, { className: xxx, count: xxx }] }
@@ -21,6 +21,7 @@ ipc = require('ipc')
 #
 class Aggregator
   run: (objectStore, objectCount) =>
+
     subSocket = zmq.socket('sub')
 
     subSocket.connect('tcp://127.0.0.1:5555')
