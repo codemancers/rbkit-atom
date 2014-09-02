@@ -57,6 +57,15 @@ sock.on('message', function(response) {
 (For now, sqlite3 need not be installed)
 To install sqlite3:
 
+### Using gulp
+
+For compiling Coffeescript files, there's a gulp task that's available.
+To use it, follow these steps:
+
+1. `cd` into `build` directory
+2. Run `npm install`
+3. Once the modules are installed, run `gulp`. The coffeescript
+   compilation process keeps running in the background.
 
 ```bash
 export npm_config_disturl=https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist
