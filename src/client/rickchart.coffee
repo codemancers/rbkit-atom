@@ -119,6 +119,7 @@ class @Graph
   updateGcStats: (gcStats) =>
     stats = $('#gcstats tbody')
     stats.empty()
+    # TODO: This step can be moved to aggregator there-by avoiding this array allocation
     importantFields = [
       'count', 'minor_gc_count', 'major_gc_count',
       'heap_length', 'heap_eden_page_length', 'heap_used',
