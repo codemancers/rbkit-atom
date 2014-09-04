@@ -1,33 +1,31 @@
-### Installation of Atom Shell
-Download and install the atom shell app from the [Github
-page](https://github.com/atom/atom-shell/releases)
+# rbkit-atom
 
-The package manager would install the app to `/Applications/Atom.app`.
-For easier development cycle, alias (or symlink appropriately) the
-following path to `atom-shell`:
+A GUI client for rbkit built using atom-shell
 
-    /Applications/Atom.app/Contents/MacOS/Atom'
+## Development
 
+### Setup
 
-Then, inside of an atom-shell project, to run the app, the command would
-be:
+- Download [atom-shell](https://github.com/atom/atom-shell/releases) and extract it somewhere
+- Create an alias `atom-shell` that points to the atom-shell [executable](https://github.com/atom/atom-shell/blob/master/docs/tutorial/quick-start.md#run-your-app) *(optional)*
+- Install [atom-package-manager](https://www.npmjs.org/package/atom-package-manager) `npm install -g atom-package-manager`
 
-    atom-shell .
+### Run
 
+- `cd` into the `rbkit-atom` directory
+- Run `apm install .`
+- Run `atom-shell .`
 
-### Rbkit Client Installation instructions:
+### Build
 
-1. Clone this repo
-2. Ensure you're having node 0.11.13 and it's `npm`
-3. Run `npm install -g atom-package-manager`
-4. Run `apm install .` inside the `rbkit-atom` directory
-
-Then run the command `atom-shell .`. This should start up the window.
+- `cd` into the `build` directory
+- Run `npm install`
+- Run `gulp` to compile CoffeeScript files on the fly
 
 ### Rbkit client command messaging
 
 For now, the command messaging system is not yet available, so, use
-either Ruby (`rbkit/experiments/rbkit_command_test.rb`) of follow the
+either Ruby (`rbkit/experiments/rbkit_command_test.rb`) or follow the
 following instructions:
 
 1. Install the `zmq` node library using `npm install -g zmq`
@@ -50,26 +48,4 @@ console.log('sent message to start profiling'); /* optional */
 sock.on('message', function(response) {
   console.log('got response');
 });
-```
-
-### Avoid
-
-(For now, sqlite3 need not be installed)
-To install sqlite3:
-
-### Using gulp
-
-For compiling Coffeescript files, there's a gulp task that's available.
-To use it, follow these steps:
-
-1. `cd` into `build` directory
-2. Run `npm install`
-3. Once the modules are installed, run `gulp`. The coffeescript
-   compilation process keeps running in the background.
-
-```bash
-export npm_config_disturl=https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist
-export npm_config_target=0.11.13
-export npm_config_arch=x64
-HOME=~/.atom-shell-gyp npm install sqlite3
 ```
