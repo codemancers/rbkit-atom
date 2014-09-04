@@ -2,12 +2,23 @@ ipc = require('ipc')
 
 grapher = new Graph('#chart')
 
-updater = ->
-  setTimeout(updater, 1000)
-  ipc.send('asynchronous-message', 'sendData')
+objCountUpdater = ->
+  setTimeout(objCountUpdater, 1000)
+  ipc.send('asynchronous-message', 'sendObjCount')
+
+gcStatsUpdater = ->
+  setTimeout(gcStatsUpdater, 3000)
+  ipc.send('asynchronous-message', 'sendGcStats')
 
 ipc.on(
-  'asynchronous-reply',
+  'gcStats',
+  (data) ->
+    return if _.isEmpty(data)
+    grapher.updateGcStats(data)
+)
+
+ipc.on(
+  'objCount',
   (data) ->
     formatForOldData = (newDataFormat) ->
       values = _.map(
@@ -23,4 +34,5 @@ ipc.on(
       grapher.renderGraphAndLegend()
 )
 
-updater()
+objCountUpdater()
+gcStatsUpdater()
