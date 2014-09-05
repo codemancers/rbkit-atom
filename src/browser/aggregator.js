@@ -15,7 +15,7 @@
       this.run = __bind(this.run, this);
     }
 
-    Aggregator.prototype.run = function(objectStore, objectCount, gcStats) {
+    Aggregator.prototype.run = function(objectStore, objectCount, gcStats, mainWindow) {
       var subSocket;
       subSocket = zmq.socket('sub');
       subSocket.connect('tcp://127.0.0.1:5555');
@@ -40,6 +40,12 @@
               switch (payloadData.event_type) {
                 case 'gc_stats':
                   _results.push(gcStats = _.clone(payloadData.payload));
+                  break;
+                case 'gc_start':
+                  _results.push(mainWindow.webContents.send('gc_start', ''));
+                  break;
+                case 'gc_end_s':
+                  _results.push(mainWindow.webContents.send('gc_end', ''));
                   break;
                 case 'obj_created':
                   existingObjectStore = _.find(objectStore, function(objectStoreData) {

@@ -1,9 +1,11 @@
 (function() {
-  var gcStatsUpdater, grapher, ipc, objCountUpdater;
+  var gcGrapher, gcStatsUpdater, grapher, ipc, objCountUpdater;
 
   ipc = require('ipc');
 
   grapher = new Graph('#chart');
+
+  gcGrapher = new GcChart('#gc-chart');
 
   objCountUpdater = function() {
     setTimeout(objCountUpdater, 1000);
@@ -34,8 +36,17 @@
     if (data.length) {
       oldStyleData = formatForOldData(data);
       grapher.addData(oldStyleData);
-      return grapher.renderGraphAndLegend();
+      grapher.renderGraphAndLegend();
+      return gcGrapher.renderGraph();
     }
+  });
+
+  ipc.on('gc_start', function(message) {
+    return gcGrapher.gcStart();
+  });
+
+  ipc.on('gc_end', function(message) {
+    return gcGrapher.gcEnd();
   });
 
   objCountUpdater();

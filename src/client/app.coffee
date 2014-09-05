@@ -1,6 +1,7 @@
 ipc = require('ipc')
 
 grapher = new Graph('#chart')
+gcGrapher = new GcChart('#gc-chart')
 
 objCountUpdater = ->
   setTimeout(objCountUpdater, 1000)
@@ -32,6 +33,19 @@ ipc.on(
       oldStyleData = formatForOldData(data)
       grapher.addData(oldStyleData)
       grapher.renderGraphAndLegend()
+      gcGrapher.renderGraph()
+)
+
+ipc.on(
+  'gc_start',
+  (message) ->
+    gcGrapher.gcStart()
+)
+
+ipc.on(
+  'gc_end',
+  (message) ->
+    gcGrapher.gcEnd()
 )
 
 objCountUpdater()

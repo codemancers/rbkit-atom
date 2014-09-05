@@ -1,5 +1,3 @@
-
-
 class @Graph
   constructor: (element) ->
     @element = element

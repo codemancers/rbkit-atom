@@ -29,7 +29,7 @@ app.on(
     objectCount = []
     objectStore = []
     gcStats = {}
-    agg.run(objectStore, objectCount, gcStats)
+    agg.run(objectStore, objectCount, gcStats, mainWindow)
 )
 
 
