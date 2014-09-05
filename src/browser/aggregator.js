@@ -15,13 +15,18 @@
       this.run = __bind(this.run, this);
     }
 
-    Aggregator.prototype.run = function(objectStore, objectCount) {
+    Aggregator.prototype.run = function(objectStore, objectCount, gcStats) {
       var subSocket;
       subSocket = zmq.socket('sub');
       subSocket.connect('tcp://127.0.0.1:5555');
       subSocket.subscribe('');
       ipc.on('asynchronous-message', function(event, arg) {
-        return event.sender.send('asynchronous-reply', objectCount);
+        switch (arg) {
+          case 'sendObjCount':
+            return event.sender.send('objCount', objectCount);
+          case 'sendGcStats':
+            return event.sender.send('gcStats', gcStats);
+        }
       });
       return subSocket.on('message', function(data) {
         var existingCount, existingObjectStore, payload, payloadData, unpackedData, _i, _len, _results;
@@ -33,6 +38,9 @@
             for (_i = 0, _len = payload.length; _i < _len; _i++) {
               payloadData = payload[_i];
               switch (payloadData.event_type) {
+                case 'gc_stats':
+                  _results.push(gcStats = _.clone(payloadData.payload));
+                  break;
                 case 'obj_created':
                   existingObjectStore = _.find(objectStore, function(objectStoreData) {
                     return objectStoreData.className === payloadData.payload["class"];

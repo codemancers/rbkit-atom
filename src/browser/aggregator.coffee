@@ -20,7 +20,7 @@ ipc = require('ipc')
 # These two should act like subscribers to the socket data that is being streamed
 #
 class Aggregator
-  run: (objectStore, objectCount) =>
+  run: (objectStore, objectCount, gcStats) =>
 
     subSocket = zmq.socket('sub')
 
@@ -29,7 +29,11 @@ class Aggregator
     ipc.on(
       'asynchronous-message',
       (event, arg) ->
-        event.sender.send('asynchronous-reply', objectCount)
+        switch arg
+          when 'sendObjCount'
+            event.sender.send('objCount', objectCount)
+          when 'sendGcStats'
+            event.sender.send('gcStats', gcStats)
     )
 
     subSocket.on(
@@ -41,6 +45,8 @@ class Aggregator
             payload = unpackedData.payload
             for payloadData in payload
               switch payloadData.event_type
+                when 'gc_stats'
+                  gcStats = _.clone(payloadData.payload)
                 when 'obj_created'
                   existingObjectStore = _.find(
                     objectStore,

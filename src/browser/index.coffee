@@ -28,7 +28,8 @@ app.on(
     agg = new Agg
     objectCount = []
     objectStore = []
-    agg.run(objectStore, objectCount)
+    gcStats = {}
+    agg.run(objectStore, objectCount, gcStats)
 )
 
 

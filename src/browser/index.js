@@ -20,7 +20,7 @@
   });
 
   app.on('ready', function() {
-    var Agg, agg, clientPath, objectCount, objectStore;
+    var Agg, agg, clientPath, gcStats, objectCount, objectStore;
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600
@@ -34,7 +34,8 @@
     agg = new Agg;
     objectCount = [];
     objectStore = [];
-    return agg.run(objectStore, objectCount);
+    gcStats = {};
+    return agg.run(objectStore, objectCount, gcStats);
   });
 
 }).call(this);
