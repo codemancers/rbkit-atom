@@ -68,8 +68,8 @@ class @Graph
       scale: d3.scale.linear()
     ).render()
 
-  renderHoverDetail:  =>
-    new Rickshaw.Graph.HoverDetail(
+  initHoverDetails:  =>
+    @hoverDetail = new Rickshaw.Graph.HoverDetail(
       graph: @graph
       formatter: (series, x, y) ->
         name  = '<div class="class-name">Class Name : <strong>' + series.name + '</strong></div>'
@@ -112,8 +112,8 @@ class @Graph
 
   renderGraphAndLegend: =>
     @graph.render()
-    @renderHoverDetail()
 
+    @initHoverDetails() unless @hoverDetail
     @initLegend() unless @legend
 
   updateGcStats: (gcStats) =>

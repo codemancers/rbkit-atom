@@ -7,7 +7,7 @@
       this.renderGraphAndLegend = __bind(this.renderGraphAndLegend, this);
       this.addData = __bind(this.addData, this);
       this.initLegend = __bind(this.initLegend, this);
-      this.renderHoverDetail = __bind(this.renderHoverDetail, this);
+      this.initHoverDetails = __bind(this.initHoverDetails, this);
       this.renderAxes = __bind(this.renderAxes, this);
       this.init = __bind(this.init, this);
       this.sortAndPickObjectsForRendering = __bind(this.sortAndPickObjectsForRendering, this);
@@ -96,8 +96,8 @@
       }).render();
     };
 
-    Graph.prototype.renderHoverDetail = function() {
-      return new Rickshaw.Graph.HoverDetail({
+    Graph.prototype.initHoverDetails = function() {
+      return this.hoverDetail = new Rickshaw.Graph.HoverDetail({
         graph: this.graph,
         formatter: function(series, x, y) {
           var colorSwatch, count, name;
@@ -138,7 +138,9 @@
 
     Graph.prototype.renderGraphAndLegend = function() {
       this.graph.render();
-      this.renderHoverDetail();
+      if (!this.hoverDetail) {
+        this.initHoverDetails();
+      }
       if (!this.legend) {
         return this.initLegend();
       }
