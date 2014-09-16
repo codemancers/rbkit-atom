@@ -26,7 +26,7 @@
       height: 600
     });
     clientPath = path.normalize("" + __dirname + "/../client");
-    mainWindow.loadUrl("file://" + clientPath + "/index.html");
+    mainWindow.loadUrl("file://" + clientPath + "/rbkit-charts/src/index.html");
     mainWindow.on('closed', function() {
       return mainWindow = null;
     });
