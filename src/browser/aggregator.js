@@ -21,11 +21,18 @@
       subSocket.connect('tcp://127.0.0.1:5555');
       subSocket.subscribe('');
       ipc.on('asynchronous-message', function(event, arg) {
+        var requiredData;
         switch (arg) {
           case 'sendObjCount':
             return event.sender.send('objCount', objectCount);
           case 'sendGcStats':
             return event.sender.send('gcStats', gcStats);
+          case 'sendHeapData':
+            requiredData = {
+              'Heap Size': gcStats.total_heap_size,
+              'Mem Size': gcStats.total_memsize
+            };
+            return event.sender.send('heapData', requiredData);
         }
       });
       return subSocket.on('message', function(data) {

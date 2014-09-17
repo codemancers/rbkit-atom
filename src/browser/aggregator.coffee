@@ -34,6 +34,12 @@ class Aggregator
             event.sender.send('objCount', objectCount)
           when 'sendGcStats'
             event.sender.send('gcStats', gcStats)
+          when 'sendHeapData'
+            requiredData ={
+              'Heap Size': gcStats.total_heap_size,
+              'Mem Size': gcStats.total_memsize,
+            }
+            event.sender.send('heapData', requiredData)
     )
 
     subSocket.on(
