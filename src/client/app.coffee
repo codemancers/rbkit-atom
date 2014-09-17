@@ -43,6 +43,20 @@ ipc.on(
     Rbkit.updateLiveObjectsChart({'Heap Objects': totalObjectCount})
 )
 
+ipc.on(
+  'gc_start',
+  (timestamp) ->
+    dateFromTimestamp = new Date(timestamp)
+    Rbkit.gcStarted(dateFromTimestamp)
+)
+
+ipc.on(
+  'gc_end',
+  (timestamp) ->
+    dateFromTimestamp = new Date(timestamp)
+    Rbkit.gcEnded(dateFromTimestamp)
+)
+
 objCountUpdater()
 gcStatsUpdater()
 heapChartsUpdater()

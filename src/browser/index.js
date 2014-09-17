@@ -35,7 +35,7 @@
     objectCount = [];
     objectStore = [];
     gcStats = {};
-    return agg.run(objectStore, objectCount, gcStats);
+    return agg.run(objectStore, objectCount, gcStats, mainWindow);
   });
 
 }).call(this);
