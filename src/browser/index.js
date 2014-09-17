@@ -22,11 +22,11 @@
   app.on('ready', function() {
     var Agg, agg, clientPath, gcStats, objectCount, objectStore;
     mainWindow = new BrowserWindow({
-      width: 800,
-      height: 600
+      width: 1000,
+      height: 800
     });
     clientPath = path.normalize("" + __dirname + "/../client");
-    mainWindow.loadUrl("file://" + clientPath + "/index.html");
+    mainWindow.loadUrl("file://" + clientPath + "/rbkit-charts/src/index.html");
     mainWindow.on('closed', function() {
       return mainWindow = null;
     });

@@ -16,9 +16,9 @@ app.on(
 app.on(
   'ready',
    ->
-    mainWindow = new BrowserWindow(width: 800, height: 600)
+    mainWindow = new BrowserWindow(width: 1000, height: 800)
     clientPath = path.normalize("#{__dirname}/../client")
-    mainWindow.loadUrl("file://#{clientPath}/index.html")
+    mainWindow.loadUrl("file://#{clientPath}/rbkit-charts/src/index.html")
     mainWindow.on(
       'closed',
        ->
@@ -31,5 +31,3 @@ app.on(
     gcStats = {}
     agg.run(objectStore, objectCount, gcStats)
 )
-
-

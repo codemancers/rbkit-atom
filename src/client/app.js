@@ -1,9 +1,7 @@
 (function() {
-  var gcStatsUpdater, grapher, ipc, objCountUpdater;
+  var gcStatsUpdater, ipc, objCountUpdater;
 
   ipc = require('ipc');
-
-  grapher = new Graph('#chart');
 
   objCountUpdater = function() {
     setTimeout(objCountUpdater, 1000);
@@ -19,23 +17,20 @@
     if (_.isEmpty(data)) {
       return;
     }
-    return grapher.updateGcStats(data);
+    return Rbkit.updateGcStats(data);
   });
 
   ipc.on('objCount', function(data) {
-    var formatForOldData, oldStyleData;
-    formatForOldData = function(newDataFormat) {
-      var values;
-      values = _.map(newDataFormat, function(objData) {
-        return [objData.className, objData.count];
-      });
-      return _.object(values);
-    };
-    if (data.length) {
-      oldStyleData = formatForOldData(data);
-      grapher.addData(oldStyleData);
-      return grapher.renderGraphAndLegend();
-    }
+    var totalObjectCount, totalObjectCountArray;
+    totalObjectCountArray = _.map(data, function(dataObject) {
+      return dataObject.count;
+    });
+    totalObjectCount = _.reduce(totalObjectCountArray, function(memo, num) {
+      return memo + num;
+    }, 0);
+    return Rbkit.updateLiveObjectsChart({
+      'Heap Objects': totalObjectCount
+    });
   });
 
   objCountUpdater();

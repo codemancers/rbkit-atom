@@ -1,7 +1,5 @@
 ipc = require('ipc')
 
-grapher = new Graph('#chart')
-
 objCountUpdater = ->
   setTimeout(objCountUpdater, 1000)
   ipc.send('asynchronous-message', 'sendObjCount')
@@ -14,24 +12,23 @@ ipc.on(
   'gcStats',
   (data) ->
     return if _.isEmpty(data)
-    grapher.updateGcStats(data)
+    Rbkit.updateGcStats(data)
 )
 
 ipc.on(
   'objCount',
   (data) ->
-    formatForOldData = (newDataFormat) ->
-      values = _.map(
-        newDataFormat,
-        (objData) ->
-          [objData.className, objData.count]
-      )
-      _.object(values)
-
-    if data.length
-      oldStyleData = formatForOldData(data)
-      grapher.addData(oldStyleData)
-      grapher.renderGraphAndLegend()
+    totalObjectCountArray = _.map(
+      data,
+      (dataObject) ->
+        dataObject.count
+    )
+    totalObjectCount = _.reduce(
+      totalObjectCountArray,
+      (memo, num) -> memo + num
+      0
+    )
+    Rbkit.updateLiveObjectsChart({'Heap Objects': totalObjectCount})
 )
 
 objCountUpdater()
