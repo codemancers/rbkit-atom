@@ -1,7 +1,11 @@
 (function() {
-  var gcStatsUpdater, gcTriggerButton, heapChartsUpdater, ipc, objCountUpdater, startProfiling, startProfilingButton, stopProfiling, stopProfilingButton, triggerGC;
+  var gcStatsUpdater, gcTriggerButton, heapChartsUpdater, ipc, isConnected, objCountUpdater, startProfiling, startProfilingButton, stopProfiling, stopProfilingButton, triggerGC;
 
   ipc = require('ipc');
+
+  isConnected = function() {
+    return stopProfilingButton.is(":visible");
+  };
 
   objCountUpdater = function() {
     setTimeout(objCountUpdater, 1000);
@@ -19,14 +23,14 @@
   };
 
   ipc.on('heapData', function(data) {
-    if (_.isEmpty(data)) {
+    if (_.isEmpty(data) || !isConnected()) {
       return;
     }
     return Rbkit.updateHeapChart(data);
   });
 
   ipc.on('gcStats', function(data) {
-    if (_.isEmpty(data)) {
+    if (_.isEmpty(data) || !isConnected()) {
       return;
     }
     return Rbkit.updateGcStats(data);
@@ -34,6 +38,9 @@
 
   ipc.on('objCount', function(data) {
     var totalObjectCount, totalObjectCountArray;
+    if (!isConnected()) {
+      return;
+    }
     totalObjectCountArray = _.map(data, function(dataObject) {
       return dataObject.count;
     });
@@ -47,12 +54,18 @@
 
   ipc.on('gc_start', function(timestamp) {
     var dateFromTimestamp;
+    if (!isConnected()) {
+      return;
+    }
     dateFromTimestamp = new Date(timestamp);
     return Rbkit.gcStarted(dateFromTimestamp);
   });
 
   ipc.on('gc_end', function(timestamp) {
     var dateFromTimestamp;
+    if (!isConnected()) {
+      return;
+    }
     dateFromTimestamp = new Date(timestamp);
     return Rbkit.gcEnded(dateFromTimestamp);
   });
@@ -70,6 +83,9 @@
   gcTriggerButton = $('#trigger-gc');
 
   triggerGC = function(event) {
+    if (!isConnected()) {
+      return;
+    }
     event.preventDefault();
     return ipc.send('asynchronous-message', 'triggerGC');
   };
