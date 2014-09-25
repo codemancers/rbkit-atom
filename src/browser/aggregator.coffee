@@ -20,7 +20,7 @@ ipc = require('ipc')
 # These two should act like subscribers to the socket data that is being streamed
 #
 class Aggregator
-  run: (objectStore, objectCount, gcStats) =>
+  run: (objectStore, objectCount, gcStats, mainWindow) =>
 
     subSocket = zmq.socket('sub')
 
@@ -51,6 +51,10 @@ class Aggregator
             payload = unpackedData.payload
             for payloadData in payload
               switch payloadData.event_type
+                when 'gc_start'
+                  mainWindow.webContents.send('gc_start', payloadData.timestamp)
+                when 'gc_end_s'
+                  mainWindow.webContents.send('gc_end', payloadData.timestamp)
                 when 'gc_stats'
                   gcStats = _.clone(payloadData.payload)
                 when 'obj_created'

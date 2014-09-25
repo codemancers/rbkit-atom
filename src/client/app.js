@@ -45,6 +45,18 @@
     });
   });
 
+  ipc.on('gc_start', function(timestamp) {
+    var dateFromTimestamp;
+    dateFromTimestamp = new Date(timestamp);
+    return Rbkit.gcStarted(dateFromTimestamp);
+  });
+
+  ipc.on('gc_end', function(timestamp) {
+    var dateFromTimestamp;
+    dateFromTimestamp = new Date(timestamp);
+    return Rbkit.gcEnded(dateFromTimestamp);
+  });
+
   objCountUpdater();
 
   gcStatsUpdater();
