@@ -12,9 +12,14 @@
   ipc.on('asynchronous-message', function(event, arg) {
     switch (arg) {
       case 'triggerGC':
-        console.log('Triggerring GC');
         controlSocket.send('trigger_gc');
-        return console.log('Triggerring GC');
+        return console.log('GC trigger command sent');
+      case 'startProfiling':
+        controlSocket.send('start_memory_profile');
+        return console.log('Memory profile start command sent');
+      case 'stopProfiling':
+        controlSocket.send('stop_memory_profile');
+        return console.log('Memory profile stop command sent');
     }
   });
 

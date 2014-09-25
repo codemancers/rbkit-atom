@@ -61,8 +61,26 @@ objCountUpdater()
 gcStatsUpdater()
 heapChartsUpdater()
 
+startProfilingButton = $('#start-profiling')
+stopProfilingButton = $('#stop-profiling')
+gcTriggerButton = $('#trigger-gc')
+
 triggerGC =  (event) ->
   event.preventDefault()
   ipc.send('asynchronous-message', 'triggerGC')
 
+startProfiling = (event) ->
+  event.preventDefault()
+  ipc.send('asynchronous-message', 'startProfiling')
+  startProfilingButton.hide()
+  stopProfilingButton.show()
+
+stopProfiling = (event) ->
+  event.preventDefault()
+  ipc.send('asynchronous-message', 'stopProfiling')
+  startProfilingButton.show()
+  stopProfilingButton.hide()
+
 $('#trigger-gc').click(triggerGC)
+$('#start-profiling').click(startProfiling)
+$('#stop-profiling').click(stopProfiling)

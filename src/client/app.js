@@ -1,5 +1,5 @@
 (function() {
-  var gcStatsUpdater, heapChartsUpdater, ipc, objCountUpdater, triggerGC;
+  var gcStatsUpdater, gcTriggerButton, heapChartsUpdater, ipc, objCountUpdater, startProfiling, startProfilingButton, stopProfiling, stopProfilingButton, triggerGC;
 
   ipc = require('ipc');
 
@@ -63,11 +63,35 @@
 
   heapChartsUpdater();
 
+  startProfilingButton = $('#start-profiling');
+
+  stopProfilingButton = $('#stop-profiling');
+
+  gcTriggerButton = $('#trigger-gc');
+
   triggerGC = function(event) {
     event.preventDefault();
     return ipc.send('asynchronous-message', 'triggerGC');
   };
 
+  startProfiling = function(event) {
+    event.preventDefault();
+    ipc.send('asynchronous-message', 'startProfiling');
+    startProfilingButton.hide();
+    return stopProfilingButton.show();
+  };
+
+  stopProfiling = function(event) {
+    event.preventDefault();
+    ipc.send('asynchronous-message', 'stopProfiling');
+    startProfilingButton.show();
+    return stopProfilingButton.hide();
+  };
+
   $('#trigger-gc').click(triggerGC);
+
+  $('#start-profiling').click(startProfiling);
+
+  $('#stop-profiling').click(stopProfiling);
 
 }).call(this);

@@ -9,7 +9,12 @@ ipc.on(
   (event, arg) ->
     switch arg
       when 'triggerGC'
-        console.log('Triggerring GC')
         controlSocket.send('trigger_gc')
-        console.log('Triggerring GC')
+        console.log('GC trigger command sent')
+      when 'startProfiling'
+        controlSocket.send('start_memory_profile')
+        console.log('Memory profile start command sent')
+      when 'stopProfiling'
+        controlSocket.send('stop_memory_profile')
+        console.log('Memory profile stop command sent')
 )

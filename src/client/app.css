@@ -19,6 +19,7 @@
   background: #6FA3EC;
 }
 
-#stop-connection {
+#stop-profiling {
+  background: #FA5142;
   display: none;
 }
