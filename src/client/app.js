@@ -1,5 +1,5 @@
 (function() {
-  var gcStatsUpdater, ipc, objCountUpdater;
+  var gcStatsUpdater, heapChartsUpdater, ipc, objCountUpdater;
 
   ipc = require('ipc');
 
@@ -12,6 +12,18 @@
     setTimeout(gcStatsUpdater, 3000);
     return ipc.send('asynchronous-message', 'sendGcStats');
   };
+
+  heapChartsUpdater = function() {
+    setTimeout(heapChartsUpdater, 1000);
+    return ipc.send('asynchronous-message', 'sendHeapData');
+  };
+
+  ipc.on('heapData', function(data) {
+    if (_.isEmpty(data)) {
+      return;
+    }
+    return Rbkit.updateHeapChart(data);
+  });
 
   ipc.on('gcStats', function(data) {
     if (_.isEmpty(data)) {
@@ -36,5 +48,7 @@
   objCountUpdater();
 
   gcStatsUpdater();
+
+  heapChartsUpdater();
 
 }).call(this);
