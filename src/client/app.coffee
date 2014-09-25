@@ -60,3 +60,9 @@ ipc.on(
 objCountUpdater()
 gcStatsUpdater()
 heapChartsUpdater()
+
+triggerGC =  (event) ->
+  event.preventDefault()
+  ipc.send('asynchronous-message', 'triggerGC')
+
+$('#trigger-gc').click(triggerGC)

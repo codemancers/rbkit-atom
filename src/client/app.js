@@ -1,5 +1,5 @@
 (function() {
-  var gcStatsUpdater, heapChartsUpdater, ipc, objCountUpdater;
+  var gcStatsUpdater, heapChartsUpdater, ipc, objCountUpdater, triggerGC;
 
   ipc = require('ipc');
 
@@ -62,5 +62,12 @@
   gcStatsUpdater();
 
   heapChartsUpdater();
+
+  triggerGC = function(event) {
+    event.preventDefault();
+    return ipc.send('asynchronous-message', 'triggerGC');
+  };
+
+  $('#trigger-gc').click(triggerGC);
 
 }).call(this);

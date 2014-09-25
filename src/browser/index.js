@@ -7,6 +7,8 @@
 
   aggregator = require('./aggregator');
 
+  require('./controls');
+
   BrowserWindow = require('browser-window');
 
   require('crash-reporter').start();
