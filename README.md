@@ -1,5 +1,7 @@
 # rbkit-atom
 
+**This was intended to be a prototype to demostrate how the rbkit server's api can be used to write custom profiler front-ends. The atom-shell version used here is quite old and might use older packages and APIs. Ideally, if you want to use this, you might want to use the Electron app (which is a fancy new name for the atom-shell project) and then customize things to make this work.**
+
 A GUI client for rbkit built using atom-shell
 
 ## Development
