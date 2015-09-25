@@ -1,0 +1,25 @@
+.controls {
+  height: 40px;
+  width: 80%;
+  margin: 30px auto 10px;
+  font-size: 0.8em;
+}
+
+.controls a {
+  display: inline-block;
+  padding: 10px 30px;
+  background: #498EEF;
+  border-radius: 5px;
+  color: white;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.controls a:hover {
+  background: #6FA3EC;
+}
+
+#stop-profiling {
+  background: #FA5142;
+  display: none;
+}
